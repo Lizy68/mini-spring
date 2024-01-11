@@ -16,6 +16,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		return doCreateBean(beanName, beanDefinition);
 	}
 
+	// 用beanClass.newInstance()来实例化，仅适用于bean有无参构造函数的情况
+	protected Object doCreateBeanOld(String beanName, BeanDefinition beanDefinition) {
+		Class beanClass = beanDefinition.getBeanClass();
+		Object bean = null;
+		try {
+			bean = beanClass.newInstance();
+		} catch (Exception e) {
+			throw new BeansException("Instantiation of bean failed", e);
+		}
+
+		addSingleton(beanName, bean);
+		return bean;
+	}
+
 	protected Object doCreateBean(String beanName, BeanDefinition beanDefinition) {
 		Object bean = null;
 		try {
